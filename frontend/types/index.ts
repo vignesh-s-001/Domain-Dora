@@ -40,6 +40,7 @@ export interface SSLInfo {
 
 export interface NetworkInfo {
   resolved_ips: string[];
+  details?: Record<string, any>;
 }
 
 export interface ErrorDetail {

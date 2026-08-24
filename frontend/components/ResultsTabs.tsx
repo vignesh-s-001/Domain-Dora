@@ -2,7 +2,7 @@
 
 import { LookupResponse } from "@/types";
 import { format, differenceInDays } from "date-fns";
-import { AlertCircle, CheckCircle2, Shield, ShieldAlert, Server, Globe, Network, Lock, Dns } from "lucide-react";
+import { AlertCircle, CheckCircle2, Shield, ShieldAlert, Server, Globe, Network, Lock } from "lucide-react";
 import { useState } from "react";
 
 export function ResultsTabs({ data }: { data: LookupResponse }) {
