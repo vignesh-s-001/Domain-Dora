@@ -82,6 +82,7 @@ function OverviewTab({ data }: { data: LookupResponse }) {
         if (val.includes("cloudfront.net")) return { name: "Amazon CloudFront", type: "CDN" };
         if (val.includes("azureedge.net") || val.includes("trafficmanager.net")) return { name: "Microsoft Azure", type: "Cloud Provider" };
         if (val.includes("fastly")) return { name: "Fastly", type: "CDN" };
+        if (val.includes("ghs.googlehosted.com") || val.includes("google.com")) return { name: "Google", type: "Hosting" };
       }
     }
 
@@ -97,6 +98,7 @@ function OverviewTab({ data }: { data: LookupResponse }) {
         if (val.includes("bluehost.com")) return { name: "Bluehost", type: "Web Hosting" };
         if (val.includes("linode.com")) return { name: "Linode / Akamai", type: "Cloud Provider" };
         if (val.includes("vercel-dns.com")) return { name: "Vercel", type: "PaaS / Hosting" };
+        if (val.includes("googledomains.com") || val.includes("google.com")) return { name: "Google", type: "Infrastructure / DNS" };
       }
     }
 
@@ -167,13 +169,15 @@ function OverviewTab({ data }: { data: LookupResponse }) {
         )}
       </div>
 
-      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6 shadow-sm">
+      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-6 shadow-sm self-start">
         <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-4 flex items-center">
           <Globe className="mr-2" size={18} /> Registration Details
         </h3>
         <div className="space-y-4">
           <DetailRow label="Domain" value={d.name} />
           <DetailRow label="Registrar" value={d.registrar?.name || "Unknown"} />
+          {d.registrar?.contact_email && <DetailRow label="Registrar Email" value={d.registrar.contact_email} />}
+          {d.registrar?.contact_phone && <DetailRow label="Registrar Phone" value={d.registrar.contact_phone} />}
           <DetailRow label="Created" value={formatDate(d.created_at)} subValue={age ? `${Math.floor(age/365)} years old` : undefined} />
           <DetailRow label="Expires" value={formatDate(d.expires_at)} />
         </div>

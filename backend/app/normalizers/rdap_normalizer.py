@@ -41,7 +41,10 @@ def normalize_domain_rdap(raw_data: dict) -> DomainInfo:
                 for prop in properties:
                     if prop[0] == "fn":
                         registrar_info.name = prop[3]
-                        break
+                    elif prop[0] == "email":
+                        registrar_info.contact_email = prop[3]
+                    elif prop[0] == "tel":
+                        registrar_info.contact_phone = prop[3]
             
             # Extract public IDs like IANA ID
             public_ids = entity.get("publicIds", [])

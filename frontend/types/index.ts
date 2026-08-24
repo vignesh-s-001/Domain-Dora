@@ -1,6 +1,8 @@
 export interface RegistrarInfo {
   name: string | null;
   iana_id: string | null;
+  contact_email?: string | null;
+  contact_phone?: string | null;
 }
 
 export interface DomainInfo {

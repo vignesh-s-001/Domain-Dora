@@ -5,6 +5,8 @@ from datetime import datetime
 class RegistrarInfo(BaseModel):
     name: Optional[str] = None
     iana_id: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_phone: Optional[str] = None
 
 class DomainInfo(BaseModel):
     name: str
