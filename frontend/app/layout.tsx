@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 import { ThemeProvider } from "@/components/theme-provider";
 import { CornerAccents } from "@/components/CornerAccents";
+import { BuyMeCoffee } from "@/components/BuyMeCoffee";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
@@ -31,6 +32,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <Providers>
             {children}
+            <BuyMeCoffee />
           </Providers>
         </ThemeProvider>
       </body>
