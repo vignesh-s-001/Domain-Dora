@@ -55,6 +55,14 @@ def normalize_network_rdap(raw_data: dict | None) -> Dict[str, Any] | None:
                         except Exception:
                             pass
     
+    GENERIC_ORGS = {
+        "private customer", "registration private", "redacted for privacy",
+        "privacy service", "domain admin", "none", "n/a", "private", "customer"
+    }
+    if not org or org.strip().lower() in GENERIC_ORGS:
+        if raw_data.get("name"):
+            org = raw_data.get("name")
+
     return {
         "cidr": cidr,
         "country": country,

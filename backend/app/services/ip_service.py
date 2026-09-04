@@ -18,7 +18,7 @@ class IPService:
         url = f"{rdap_server}ip/{ip}"
         
         try:
-            async with httpx.AsyncClient(timeout=self.timeout) as client:
+            async with httpx.AsyncClient(timeout=self.timeout, follow_redirects=True) as client:
                 response = await client.get(url)
                 if response.status_code == 404:
                     logger.info(f"IP {ip} not found in RDAP")

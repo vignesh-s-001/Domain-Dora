@@ -48,6 +48,21 @@ class ErrorDetail(BaseModel):
     service: str
     message: str
 
+class TechnologyDetection(BaseModel):
+    name: str
+    category: str
+    status: str # "confirmed", "high confidence", "possible", "no evidence"
+    confidence: float
+    evidence: List[str] = Field(default_factory=list)
+
+class TechnologyInfo(BaseModel):
+    frontend: List[TechnologyDetection] = Field(default_factory=list)
+    packages: List[TechnologyDetection] = Field(default_factory=list)
+    backend: List[TechnologyDetection] = Field(default_factory=list)
+    infrastructure: List[TechnologyDetection] = Field(default_factory=list)
+    cdn: List[TechnologyDetection] = Field(default_factory=list)
+    analytics: List[TechnologyDetection] = Field(default_factory=list)
+
 class LookupResponse(BaseModel):
     query: str
     type: str
@@ -58,5 +73,6 @@ class LookupResponse(BaseModel):
     dns: Optional[DNSLookupResult] = None
     ssl: Optional[SSLInfo] = None
     network: Optional[NetworkInfo] = None
+    technology: Optional[TechnologyInfo] = None
     
     errors: List[ErrorDetail] = Field(default_factory=list)

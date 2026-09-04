@@ -6,3 +6,4 @@ httpx
 tldextract
 dnspython
 redis
+beautifulsoup4

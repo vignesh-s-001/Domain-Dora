@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 class DomainParts(BaseModel):
     input: str
     normalized: str
+    target_host: str
     domain: str
     suffix: str
     subdomain: str
@@ -12,6 +13,8 @@ class DomainParts(BaseModel):
 def normalize_domain(domain_input: str) -> DomainParts:
     """
     Normalizes a domain input. Removes protocol, paths, etc., and extracts TLD parts.
+    - normalized: registered domain (e.g. mekark.com) - used for RDAP/WHOIS
+    - target_host: full hostname (e.g. manufacturing.mekark.com) - used for DNS, SSL, Tech
     """
     original_input = domain_input.strip().lower()
     
@@ -21,7 +24,6 @@ def normalize_domain(domain_input: str) -> DomainParts:
         host = parsed.hostname or ""
     else:
         # urlparse might not parse correctly without scheme
-        # Let's add a fake scheme just to extract hostname if there are paths
         if "/" in original_input:
             parsed = urlparse(f"http://{original_input}")
             host = parsed.hostname or ""
@@ -40,16 +42,14 @@ def normalize_domain(domain_input: str) -> DomainParts:
         raise ValueError("Invalid domain: Missing registrable domain name")
         
     normalized = extracted.registered_domain
-    
-    # Sometimes we want to include subdomain if it's significant, 
-    # but for WHOIS/RDAP, we usually query the registered domain.
-    # The requirement: "Determine the registrable domain"
-    # Wait, if input is www.example.co.in, normalized should be example.co.in according to the prompt
+    target_host = host if host else normalized
     
     return DomainParts(
         input=original_input,
         normalized=normalized,
+        target_host=target_host,
         domain=extracted.domain,
         suffix=extracted.suffix,
         subdomain=extracted.subdomain
     )
+

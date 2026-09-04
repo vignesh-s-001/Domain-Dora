@@ -9,6 +9,7 @@ from app.services.rdap_service import rdap_service
 from app.services.dns_service import dns_service
 from app.services.ssl_service import ssl_service
 from app.services.ip_service import ip_service
+from app.services.technology.technology_service import technology_service
 
 from app.normalizers.rdap_normalizer import normalize_domain_rdap
 from app.normalizers.dns_normalizer import normalize_dns
@@ -63,23 +64,31 @@ class LookupService:
 
         async def fetch_dns():
             try:
-                return await dns_service.lookup(domain_parts.normalized)
+                return await dns_service.lookup(domain_parts.target_host)
             except Exception as e:
                 errors.append(ErrorDetail(service="dns", message=str(e)))
                 return None
                 
         async def fetch_ssl():
             try:
-                return await ssl_service.lookup(domain_parts.normalized)
+                return await ssl_service.lookup(domain_parts.target_host)
             except Exception as e:
                 errors.append(ErrorDetail(service="ssl", message=str(e)))
                 return None
+                
+        async def fetch_technology():
+            try:
+                return await technology_service.scan_domain(domain_parts.target_host)
+            except Exception as e:
+                errors.append(ErrorDetail(service="technology", message=str(e)))
+                return None
 
-        # Execute RDAP, DNS, and SSL concurrently
-        rdap_raw, dns_raw, ssl_raw = await asyncio.gather(
+        # Execute RDAP, DNS, SSL, and Technology concurrently
+        rdap_raw, dns_raw, ssl_raw, tech_info = await asyncio.gather(
             fetch_rdap(),
             fetch_dns(),
             fetch_ssl(),
+            fetch_technology(),
             return_exceptions=False
         )
 
@@ -122,5 +131,6 @@ class LookupService:
             dns=dns_info,
             ssl=ssl_info,
             network=network_info,
+            technology=tech_info,
             errors=errors
         )
