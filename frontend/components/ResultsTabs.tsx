@@ -4,6 +4,7 @@ import { LookupResponse } from "@/types";
 import { format, differenceInDays } from "date-fns";
 import { AlertCircle, CheckCircle2, Shield, ShieldAlert, Server, Globe, Network, Lock } from "lucide-react";
 import { useState } from "react";
+import { TechnologyStack } from "./TechnologyStack";
 
 export function ResultsTabs({ data }: { data: LookupResponse }) {
   const [activeTab, setActiveTab] = useState("overview");
@@ -13,6 +14,7 @@ export function ResultsTabs({ data }: { data: LookupResponse }) {
     { id: "dns", label: "DNS" },
     { id: "ssl", label: "SSL" },
     { id: "network", label: "Network" },
+    { id: "technology", label: "Technology" },
     { id: "raw", label: "Raw Data" },
   ];
 
@@ -43,6 +45,7 @@ export function ResultsTabs({ data }: { data: LookupResponse }) {
         {activeTab === "dns" && <DNSTab data={data} />}
         {activeTab === "ssl" && <SSLTab data={data} />}
         {activeTab === "network" && <NetworkTab data={data} />}
+        {activeTab === "technology" && <TechnologyTab data={data} />}
         {activeTab === "raw" && <RawDataTab data={data} />}
       </div>
     </div>
@@ -376,4 +379,17 @@ function RawDataTab({ data }: { data: any }) {
       </pre>
     </div>
   );
+}
+
+function TechnologyTab({ data }: { data: LookupResponse }) {
+  if (!data.technology) {
+    return (
+      <div className="p-8 text-center text-neutral-500 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-sm">
+        <AlertCircle className="mx-auto mb-4 text-neutral-400" size={32} />
+        <p>Technology scan data is not available.</p>
+      </div>
+    );
+  }
+  
+  return <TechnologyStack data={data.technology} lookupData={data} />;
 }

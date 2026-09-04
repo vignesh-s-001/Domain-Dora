@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -8,6 +8,11 @@ import { motion } from 'framer-motion';
 export function SearchComponent({ initialQuery = '' }: { initialQuery?: string }) {
   const [query, setQuery] = useState(initialQuery);
   const router = useRouter();
+
+  // Keep input in sync when navigating between lookup pages
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,8 +22,10 @@ export function SearchComponent({ initialQuery = '' }: { initialQuery?: string }
       cleanQuery = cleanQuery.replace(/^https?:\/\//i, '');
       // Remove trailing slash if exists
       cleanQuery = cleanQuery.replace(/\/$/, '');
-      
-      router.push(`/lookup/${encodeURIComponent(cleanQuery)}`);
+
+      const targetPath = `/lookup/${encodeURIComponent(cleanQuery)}`;
+      router.push(targetPath);
+      router.refresh(); // Force data re-fetch even if same URL
     }
   };
 

@@ -50,6 +50,23 @@ export interface ErrorDetail {
   message: string;
 }
 
+export interface TechnologyDetection {
+  name: string;
+  category: string;
+  status: string;
+  confidence: number;
+  evidence: string[];
+}
+
+export interface TechnologyInfo {
+  frontend: TechnologyDetection[];
+  packages: TechnologyDetection[];
+  backend: TechnologyDetection[];
+  infrastructure: TechnologyDetection[];
+  cdn: TechnologyDetection[];
+  analytics: TechnologyDetection[];
+}
+
 export interface LookupResponse {
   query: string;
   type: string;
@@ -60,6 +77,7 @@ export interface LookupResponse {
   dns: DNSLookupResult | null;
   ssl: SSLInfo | null;
   network: NetworkInfo | null;
+  technology: TechnologyInfo | null;
   
   errors: ErrorDetail[];
 }
